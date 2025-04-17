@@ -1,13 +1,15 @@
 # AxoMulti
 Multitimbral polyphonic synth for Axoloti 1.0.12
 
-Reminiscent of oldschool hardware synths like MT32, EVS-1, FB01 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti).
+Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti).
 
----picture---
+![detail of the patch](images/xpatch.png)
 
-One of five 'engines' can be assigned to MIDI channels 1..6 with 8 polyphonic voices per channel. An additional set of drum voices on MIDI channel 10 bring the total polyphonic voices to at least 32 (in the default configuration).
+An _'engine'_ be assigned to MIDI channels 1..6 with 8 polyphonic voices per channel. An additional set of drum voices on MIDI channel 10 bring the total polyphonic voices to at least 32 (in the default configuration).
 
 Synth engines include FM, PM, Waveshaping, Wavetable, Physical mdelling, and drum ROMpler types.
+
+![one of the engines](images/engine.png)
 
 Realtime patch editing is possible via MIDI CC messages and front panel controls. A complete MULTI setup can be stored in a sequencer, as can expressive changes to patch parameters during realtime performance, or using CC automation. See [Midi Implementation](#midi-implementation) section below for more info.
 
@@ -16,26 +18,62 @@ Realtime patch editing is possible via MIDI CC messages and front panel controls
 Copy `startup.bin` and `zp-kit1.wav` to a microSD card, insert into hardware, switch on and enjoy the sounds. 😎
 You can use Axoloti editor `upload to internal flash` menu option for synthesis-only (drum channel 10 will simply be silent).
 
+Voices have no release envelope, snap on and snap off, no CHANNEL AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet.
+
 # Compatibility and requirements
 
 Extensive testing and development with Axoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
 
 # MIDI implementation
 
-Channels 1..6 may be configured as pitched voices, select engine with MIDI PROGRAM CHANGE.
-Channel 10 is always drumkit (if you have an SD card with wav files, silence otherwise).
+* Channels 1..6 may be configured as pitched voices, select engine with MIDI PROGRAM CHANGE.
+* Channel 10 is always drumkit (if you have an SD card with wav files, silence otherwise).
 
-MIDI CONTROL CHANGE #7 sets channel volume on any supported channel
-MIDI PROGRAM CHANGE 0,1,2 etc selects the pitched voice engine
-MIDI PROGRAM CHANGE 127 invokes a response for all values for the selected voice engine
+* MIDI CONTROL CHANGE #7 sets channel volume on any supported channel
+* MIDI PROGRAM CHANGE 0,1,2 etc selects the pitched voice engine
+* MIDI PROGRAM CHANGE 127 invokes a response for all values for the selected voice engine
 
-Voice engine 1: noisy shift register (MI)
-Voice engine 2: feedback fm (MI)
-Voice engine 3: sine waveshaper (SSS)
-Voice engine 4: sine wavefolder (SSS)
-Voice engine 5: asymmetrical sinefolder (SSS)
+There are two versions in development, each with different sets of voice engines.
 
----table---
+|Version 7a     |Description                    |
+|---------------|-------------------------------|
+|Voice engine 0 | idle, no DSP                  |
+|Voice engine 1 | noisy shift register (MI)     |
+|Voice engine 2 | feedback fm (MI)              |
+|Voice engine 3 | sine waveshaper (SSS)         |
+|Voice engine 4 | sine wavefolder (SSS)         |
+|Voice engine 5 | asymmetrical sinefolder (SSS) |
+
+|Version 6c     |Description                    |
+|---------------|-------------------------------|
+|Voice engine 0 | idle, no DSP                  |
+|Voice engine 1 | fm (MI)                       |
+|Voice engine 2 | sinefolder (MI)               |
+|Voice engine 3 | wavetables (MI)               |
+|Voice engine 4 | buzz (MI)                     |
+|Voice engine 1 | noisy shift register (MI)     |
+|Voice engine 2 | feedback fm (MI)              |
+
+A consistent map of MIDI CONTROL CHANGE 16..31 is used for all pitched voice channels to configure parameters.
+|CC#|Description               |
+|---|--------------------------|
+|07	|volume                    |
+|16	|voice timbre              |
+|17	|voice colour(if available)|
+|18	|a time                    |
+|19	|a vel-time                |
+|20	|t time                    |
+|21	|t vel+-                   |
+|22	|t env                     |
+|23	|c time     (if available) |
+|24	|c vel-time (if available) |
+|25	|c env      (if available) |
+|26	|s time     (if available) |
+|27	|s vel-time	(if available) |
+|28	|s env      (if available) |
+|29 |t set      (if available) |
+|30 |c set      (if available) |
+|31 |s set      (if available) |
 
 # To build from source
 
@@ -45,3 +83,9 @@ The editor project `AxoMulti.axp` file(s) are also provided which require valid 
 * ZPO-POLYFIX perl 's/find/replace/g' to optimise idle polyphonic voices
 * ZPO-KVPLOMEM perl 's/find/replace/g' to omit KVP IPVP etc registration, saving SRAM
 * gcc -O1 preferred optimisation, again saving SRAM
+
+# Anything else I should know?
+
+Yeah, unlike EVOLUTION EVS-1 behaviour, switching engine with a PROGRAM CHANGE initialises voice params. I would love to preserve parameter values across switching so yu can ask and answer the question _"I wonder what these parameter values would sound like on a different engine?"_... You can kinda work around this to capture a state dump in your sequencer and retransmit CONTROL CHANGE param values with a different PROGRAM CHANGE, but it's a bit of a faff.
+
+I'm working on developing this to work with multiple Axoloti core boards as 'voice cards' with a master receiving MIDI channel messages and despatching to the voice cards, bussing all of their audio outputs together. That'll be fun, but I'm not there yet.
