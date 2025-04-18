@@ -1,28 +1,28 @@
 # AxoMulti
-Multitimbral polyphonic synth for Axoloti 1.0.12
+Multitimbral polyphonic synth for axoloti and ksoloti 1.0.12
 
 Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti).
 
 ![detail of the patch](images/xpatch.png)
 
-An _'engine'_ be assigned to MIDI channels 1..6 with 8 polyphonic voices per channel. An additional set of drum voices on MIDI channel 10 bring the total polyphonic voices to at least 32 (in the default configuration).
+Synth _'Engines'_ are assigned to MIDI channels 1..6 with eight polyphonic voices per channel. An additional set of drum voices bring the total polyphonic voices to at least 50 in the default configuration.
 
-Synth engines include FM, PM, Waveshaping, Wavetable, Physical mdelling, and drum ROMpler types.
+Synth engines include FM, PM, Waveshaping, Wavetable, Physical mudelling, and drum ROMpler types.
 
 ![one of the engines](images/engine.png)
 
-Realtime patch editing is possible via MIDI CC messages and front panel controls. A complete MULTI setup can be stored in a sequencer, as can expressive changes to patch parameters during realtime performance, or using CC automation. See [Midi Implementation](#midi-implementation) section below for more info.
+Realtime patch editing uses MIDI CONTROL CHANGE messages. A complete MULTI setup can be stored in a sequencer, as can expressive changes to patch parameters during realtime performance, or using CC automation. See [Midi Implementation](#midi-implementation) section below for more info.
 
 # Installation and usage
 
-Copy `startup.bin` and `zp-kit1.wav` to a microSD card, insert into hardware, switch on and enjoy the sounds. 😎
-You can use Axoloti editor `upload to internal flash` menu option for synthesis-only (drum channel 10 will simply be silent).
+Copy the .bin and .wav files to a microSD card, insert into hardware, switch on and enjoy the sounds. 😎
+No card, no problem. Use Axoloti editor `upload to internal flash` menu option for synthesis-only (drum channel 10 will simply be silent).
 
-Voices have no release envelope, snap on and snap off, no CHANNEL AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet.
+Voices have no release envelope, snap on and snap off, no CHANNEL or POLY AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet. Can you help?
 
 # Compatibility and requirements
 
-Extensive testing and development with Axoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
+Development and extensive testing has been carried out with Axoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
 
 # MIDI implementation
 
@@ -51,8 +51,8 @@ There are two versions in development, each with different sets of voice engines
 |Voice engine 2 | sinefolder (MI)               |
 |Voice engine 3 | wavetables (MI)               |
 |Voice engine 4 | buzz (MI)                     |
-|Voice engine 1 | noisy shift register (MI)     |
-|Voice engine 2 | feedback fm (MI)              |
+|Voice engine 5 | noisy shift register (MI)     |
+|Voice engine 6 | feedback fm (MI)              |
 
 A consistent map of MIDI CONTROL CHANGE 16..31 is used for all pitched voice channels to configure parameters.
 |CC#|Description               |
@@ -86,6 +86,9 @@ The editor project `AxoMulti.axp` file(s) are also provided which require valid 
 
 # Anything else I should know?
 
-Yeah, unlike EVOLUTION EVS-1 behaviour, switching engine with a PROGRAM CHANGE initialises voice params. I would love to preserve parameter values across switching so yu can ask and answer the question _"I wonder what these parameter values would sound like on a different engine?"_... You can kinda work around this to capture a state dump in your sequencer and retransmit CONTROL CHANGE param values with a different PROGRAM CHANGE, but it's a bit of a faff.
+Yeah, unlike EVOLUTION EVS-1 behaviour, switching engine with a PROGRAM CHANGE initialises voice params. I would love to preserve parameter values across switching to easily answer the question _"I wonder what these parameter values would sound like on a different engine?"_... You can kinda work around this to capture a state dump in your sequencer and retransmit CONTROL CHANGE param values with a different PROGRAM CHANGE, but it's a bit of a faff.
 
-I'm working on developing this to work with multiple Axoloti core boards as 'voice cards' with a master receiving MIDI channel messages and despatching to the voice cards, bussing all of their audio outputs together. That'll be fun, but I'm not there yet.
+I'm working on developing this to work with multiple Axoloti core boards as 'voice cards' with a master receiving MIDI channel messages and despatching to the voice cards, bussing audio outputs together. That'll be fun, but I'm not there yet. Can you help?
+
+See my other axoloti projects
+ * [AxoPanelControls github repo](https://github.com/zenpho/AxoPanelControls) hastily constructed control panel for axoloti and ksoloti
