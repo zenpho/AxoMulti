@@ -1,7 +1,7 @@
 # AxoMulti
 Multitimbral polyphonic synth for axoloti and ksoloti 1.0.12
 
-Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti).
+Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti) and compatible with [Ksoloti platform](https://github.com/ksoloti].
 
 ![detail of the patch](images/xpatch.png)
 
@@ -16,13 +16,13 @@ Realtime patch editing uses MIDI CONTROL CHANGE messages. A complete MULTI setup
 # Installation and usage
 
 Copy the .bin and .wav files to a microSD card, insert into hardware, switch on and enjoy the sounds. 😎
-No card, no problem. Use Axoloti editor `upload to internal flash` menu option for synthesis-only (drum channel 10 will simply be silent).
+No card, no problem. Use editor `upload to internal flash` menu option for synthesis-only (drum channel 10 will simply be silent).
 
 Voices have no release envelope, snap on and snap off, no CHANNEL or POLY AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet. Can you help?
 
 # Compatibility and requirements
 
-Development and extensive testing has been carried out with Axoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
+Development and extensive testing has been carried out with Axoloti and Ksoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
 
 # MIDI implementation
 
@@ -77,7 +77,7 @@ A consistent map of MIDI CONTROL CHANGE 16..31 is used for all pitched voice cha
 
 # To build from source
 
-The `xpatch.cpp` exported from Axoloti 1.0.12 editor is provided.
+The `xpatch.cpp` exported from editor v1.0.12 is provided.
 The editor project `AxoMulti.axp` file(s) are also provided which require valid installation of the `axoloti-factory` and `axoloti-community` repositories as well as my very necessary modifications to the build configuration file `Makefile.patch`.
 
 * ZPO-POLYFIX perl 's/find/replace/g' to optimise idle polyphonic voices
@@ -90,5 +90,5 @@ Yeah, unlike EVOLUTION EVS-1 behaviour, switching engine with a PROGRAM CHANGE i
 
 I'm working on developing this to work with multiple Axoloti core boards as 'voice cards' with a master receiving MIDI channel messages and despatching to the voice cards, bussing audio outputs together. That'll be fun, but I'm not there yet. Can you help?
 
-See my other axoloti projects
+See my other axo/kso projects
  * [AxoPanelControls github repo](https://github.com/zenpho/AxoPanelControls) hastily constructed control panel for axoloti and ksoloti
