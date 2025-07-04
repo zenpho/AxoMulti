@@ -1,7 +1,7 @@
 # AxoMulti
 Multitimbral polyphonic synth for axoloti and ksoloti 1.0.12
 
-Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti) and compatible with [Ksoloti platform](https://github.com/ksoloti].
+Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a multitimbral polysynth 'expander module' built with the [Axoloti platform by Johannes Taelman](https://github.com/axoloti/axoloti) and compatible with [Ksoloti platform](https://github.com/ksoloti).
 
 ![detail of the patch](images/xpatch.png)
 
