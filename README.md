@@ -15,27 +15,29 @@ Realtime patch editing uses MIDI CONTROL CHANGE messages. A complete MULTI setup
 
 # Installation and usage
 
-Copy the .bin and .wav files to a microSD card, insert into hardware, switch on and enjoy the sounds. 😎
-No card, no problem. Use editor `upload to internal flash` menu option for synthesis-only (drum channel 10 will simply be silent).
+No editor, no problem. Copy the files to a microSD card (including `start.bin`), insert into hardware, switch on and enjoy the sounds. 😎
 
-Voices have no release envelope, snap on and snap off, no CHANNEL or POLY AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet. Can you help?
+Voices have no CHANNEL or POLY AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet. Can you help?
 
 # Compatibility and requirements
 
-Development and extensive testing has been carried out with Axoloti and Ksoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
+Development and extensive testing has been carried out with Axoloti firmware hardware and editor with release 1.0. This release 1.1 focuses on Ksoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
 
 # MIDI implementation
 
 * Channels 1..6 may be configured as pitched voices, select engine with MIDI PROGRAM CHANGE.
 * Channel 10 is always drumkit (if you have an SD card with wav files, silence otherwise).
 
-* MIDI CONTROL CHANGE #7 sets channel volume on any supported channel
+* MIDI CONTROL CHANGE 7 sets volume on any supported channel
+* MIDI CONTROL CHANGE 10 sets routing (only left, left+right, right only)
+* MIDI CONTROL CHANGE 72 sets envelope type (snap, gentle fade-out only, in-and-out)
+
 * MIDI PROGRAM CHANGE 0,1,2 etc selects the pitched voice engine
 * MIDI PROGRAM CHANGE 127 invokes a response for all values for the selected voice engine
 
-There are two versions in development, each with different sets of voice engines.
+There are two implementations, each with different sets of voice engines.
 
-|Version 7a     |Description                    |
+|Version 28a     |Description                    |
 |---------------|-------------------------------|
 |Voice engine 0 | idle, no DSP                  |
 |Voice engine 1 | noisy shift register (MI)     |
@@ -44,7 +46,7 @@ There are two versions in development, each with different sets of voice engines
 |Voice engine 4 | sine wavefolder (SSS)         |
 |Voice engine 5 | asymmetrical sinefolder (SSS) |
 
-|Version 6c     |Description                    |
+|Version 28b     |Description                    |
 |---------------|-------------------------------|
 |Voice engine 0 | idle, no DSP                  |
 |Voice engine 1 | fm (MI)                       |
@@ -77,8 +79,8 @@ A consistent map of MIDI CONTROL CHANGE 16..31 is used for all pitched voice cha
 
 # To build from source
 
-The `xpatch.cpp` exported from editor v1.0.12 is provided.
-The editor project `AxoMulti.axp` file(s) are also provided which require valid installation of the `axoloti-factory` and `axoloti-community` repositories as well as my very necessary modifications to the build configuration file `Makefile.patch`.
+The `xpatch.cpp` and `patch.bin` files exported from editor v1.0.12 are provided.
+The editor project `.axp` file(s) are also provided which require valid installation of the `axoloti-factory` and `axoloti-community` repositories as well as my very necessary modifications to the build configuration file `Makefile.patch`.
 
 * ZPO-POLYFIX perl 's/find/replace/g' to optimise idle polyphonic voices
 * ZPO-KVPLOMEM perl 's/find/replace/g' to omit KVP IPVP etc registration, saving SRAM
@@ -92,3 +94,5 @@ I'm working on developing this to work with multiple Axoloti core boards as 'voi
 
 See my other axo/kso projects
  * [AxoPanelControls github repo](https://github.com/zenpho/AxoPanelControls) hastily constructed control panel for axoloti and ksoloti
+ * [ks1.0.12 firmware](https://github.com/zenpho/ks1.0.12/tree/midi-patch) my modified ksoloti firmware with midi 'improvements'
+ * [kz editor](https://github.com/zenpho/kzeditor) modified OG Axoloti editor compatible with older intel macs and older MacOS
