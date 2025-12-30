@@ -1,3 +1,20 @@
+/*
+   AxoMulti by zenpho ::: see github.com/zenpho/AxoMulti
+   Multitimbral polyphonic engine for Axoloti v1.0.12
+ 
+   We (ab)use the ParameterExchange mechanism a fair bit, and rework
+   much of the (also courtesy of Axo editor) polyphonic voice handling
+   to get close to 1990s style behaviour like MT32 EVS-1 FB01 etc
+ 
+   We also (ab)use section(".sdram") stuff to cram everything into the
+   STM32F427 256kb of cortex SRAM and prefer using Axoloti Core SDRAM
+ 
+   I'm not too proud of the vtype switching code but this is a first
+   (very shitty, very embarrasing) attempt and it works - Yay! I guess?
+ 
+   Horrend-o-whitespace layout courtesy of Axo editor
+   Suggest prettyprint for more joyous happy readable funtime yeah?
+*/
 #include "~/Documents/ksoloti/1.0.12/axoloti-factory/objects/osc/brds/brds_digital.h"
 #include "~/Documents/ksoloti/1.0.12/axoloti-factory/objects/osc/brds/brds_analog.h"
 

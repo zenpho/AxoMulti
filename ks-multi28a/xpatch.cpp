@@ -1,5 +1,5 @@
 /*
-   AxoMulti v7a by zenpho ::: see github.com/zenpho/AxoMulti
+   AxoMulti by zenpho ::: see github.com/zenpho/AxoMulti
    Multitimbral polyphonic engine for Axoloti v1.0.12
  
    We (ab)use the ParameterExchange mechanism a fair bit, and rework
