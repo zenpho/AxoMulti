@@ -67,6 +67,14 @@ ${BUILDDIR}/xpatch.bin: ${BUILDDIR}/xpatch.cpp ${BUILDDIR}/xpatch.h.gch
 	@perl -i -pe 's/SetKVP_IPVP.*//g' ${BUILDDIR}/xpatch.cpp
 	@perl -i -pe 's/KVP_RegisterObject.*//g' ${BUILDDIR}/xpatch.cpp
 
+#	ZP omit algo__ instances and calls but preserve declarations
+	@echo ZP-OMITALGO
+	@perl -i -pe 's/instancealgo__\d+\ instancealgo__\d+\_i.*//g' ${BUILDDIR}/xpatch.cpp
+	@perl -i -pe 's/instancealgo__\d+\_i.Init\(.*//g' ${BUILDDIR}/xpatch.cpp
+	@perl -i -pe 's/instancealgo__\d+\_i.Dispose\(.*//g' ${BUILDDIR}/xpatch.cpp
+	@perl -i -pe 's/instancealgo__\d+\_i.dsp\(.*//g' ${BUILDDIR}/xpatch.cpp
+	@perl -i -pe 's/instancealgo__\d+\_i.MidiInHandler\(.*//g' ${BUILDDIR}/xpatch.cpp
+
 #	@echo Compiling patch dependencies
 	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -Winvalid-pch -MD -MP --include ${BUILDDIR}/xpatch.h -c ${BUILDDIR}/xpatch.cpp -o ${BUILDDIR}/xpatch.o
 #	@echo Linking patch dependencies

@@ -5,7 +5,7 @@ Reminiscent of oldschool hardware synths like EVS-1, FB01, MT32 etc this is a mu
 
 ![detail of the patch](images/xpatch.png)
 
-Synth _'Engines'_ are assigned to MIDI channels 1..6 with eight polyphonic voices per channel. An additional set of drum voices bring the total polyphonic voices to at least 50 in the default configuration.
+Synth _'Engines'_ are algorithms assigned to MIDI channels with eight polyphonic voices per channel. An additional set of drum voices bring the total polyphonic voices to at least 50 in the default configuration.
 
 Synth engines include FM, PM, Waveshaping, Wavetable, Physical mudelling, and drum ROMpler types.
 
@@ -17,16 +17,21 @@ Realtime patch editing uses MIDI CONTROL CHANGE messages. A complete MULTI setup
 
 No editor, no problem. Copy the files to a microSD card (including `start.bin`), insert into hardware, switch on and enjoy the sounds. 😎
 
-Voices have no CHANNEL or POLY AFTER TOUCH, PITCH BEND, nor MOD WHEEL support yet. Can you help?
+# Help!
+
+I'm working on developing this to work with multiple boards as 'voice cards' with a central device receiving MIDI channel messages and despatching to the voice cards, bussing audio outputs together. That'll be fun, but I'm not there yet. Can you help?
+
+Most synth engines here do not use CHANNEL or POLY AFTER TOUCH, PITCH BEND, nor MOD WHEEL yet. Can you help?
 
 # Compatibility and requirements
 
-Development and extensive testing has been carried out with Axoloti firmware hardware and editor with release 1.0. This release 1.1 focuses on Ksoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
+Development and extensive testing has been carried out with both axoloti and ksoloti firmware hardware and editor. This release 1.2 focuses on Ksoloti v1.0.12 firmware hardware and editor. You need a microSD card at least 1MByte in size for the drumkit wave ROM. 
 
 # MIDI implementation
 
 * Channels 1..6 may be configured as pitched voices, select engine with MIDI PROGRAM CHANGE.
 * Channel 10 is always drumkit (if you have an SD card with wav files, silence otherwise).
+* Channel 11 is an optional second drum kit (see note above).
 
 * MIDI CONTROL CHANGE 7 sets volume on any supported channel
 * MIDI CONTROL CHANGE 10 sets routing (only left, left+right, right only)
@@ -57,6 +62,7 @@ There are two implementations, each with different sets of voice engines.
 |Voice engine 6 | feedback fm (MI)              |
 
 A consistent map of MIDI CONTROL CHANGE 16..31 is used for all pitched voice channels to configure parameters.
+
 |CC#|Description               |
 |---|--------------------------|
 |07	|volume                    |
@@ -90,9 +96,23 @@ The editor project `.axp` file(s) are also provided which require valid installa
 
 Yeah, unlike EVOLUTION EVS-1 behaviour, switching engine with a PROGRAM CHANGE initialises voice params. I would love to preserve parameter values across switching to easily answer the question _"I wonder what these parameter values would sound like on a different engine?"_... You can kinda work around this to capture a state dump in your sequencer and retransmit CONTROL CHANGE param values with a different PROGRAM CHANGE, but it's a bit of a faff.
 
-I'm working on developing this to work with multiple Axoloti core boards as 'voice cards' with a master receiving MIDI channel messages and despatching to the voice cards, bussing audio outputs together. That'll be fun, but I'm not there yet. Can you help?
-
 See my other axo/kso projects
  * [AxoPanelControls github repo](https://github.com/zenpho/AxoPanelControls) hastily constructed control panel for axoloti and ksoloti
  * [ks1.0.12 firmware](https://github.com/zenpho/ks1.0.12/tree/midi-patch) my modified ksoloti firmware with midi 'improvements'
  * [kz editor](https://github.com/zenpho/kzeditor) modified OG Axoloti editor compatible with older intel macs and older MacOS
+
+# Quick sketching with ks-multi30c
+
+The consistent MIDI CONTROL CHANGE [mapping](#midi-implementation) across all synth _'engine'_ algorithms is beneficial but such a hastle when designing new engines.
+
+When inconsistent mapping is acceptable. Using `ks-multi30c` is effective to quickly sketch music with multiple polyphonic parts on multiple simulateneous timbres (BAS, PNO, KIT, TPT, TBN etc). 
+
+I often:
+
+ 1. pick and paste-replace engines from `bank30` into a unique copy of the `30c` template then send to ksoloti hardware
+ 2. send MIDI PROGRAM CHANGE and MIDI CONTROL CHANGE to design multiple sounds (PNO, BRS, STR, etc) _being forced to guess which control affects which parameter and being guided by ear alone_
+ 3. save the complete MULTI setup (including all voice engine state variables) in my MIDI sequencer project with perfect recall
+
+![detail of ks-multi30 patch](images/multi30.png)
+
+To build from source this requires `ZP-OMITALGO` (part of my `Makefile.patch`) which will optimise SRAM usage.
